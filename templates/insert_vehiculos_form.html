@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- <link rel="stylesheet" href="../static/styles/style.css"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta de vehículos</title>
+</head>
+<body>
+    
+    <!--Mensaje Flash-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for message in messages %}
+                <li style="color: red; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; ">{{ message }}</li>
+            {% endfor %}
+        {% endif %} 
+    {% endwith %}
+    
+    <header>
+        <div class="title">
+            <h1>Alta de vehículos</h1>
+        </div>  
+    </header>
+    <div>
+        <form class="form" action="/insert_vehiculo/", method="post" style="text-align: center;">
+            <div>
+                <label for="dominio">Patente:  </label>
+                <input type="text" name="dominio" id="dominio" size="20" required><br>
+            </div>
+            <div>
+                <label for="fk_marca_id">Seleccione la marca: </label> 
+                <select id="marca" name="marca" size="1" required>
+                    {% for marca in marcas -%}
+                        <option value={{marca.0}}>{{marca.1}}</option>
+                    {% endfor -%}
+                </select>
+            </div>
+            <div>
+                <label for="fk_modelo_id">Seleccione el modelo: </label> 
+                <select id="modelo" name="modelo" size="1" required>
+                    {% for modelo in modelos -%}
+                    <option value={{modelo.0}}>{{modelo.1}}</option>
+                    {% endfor -%}
+                </select><br>
+            </div>
+            <div>
+                <input class="button_form" type="submit" value="Registrar">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

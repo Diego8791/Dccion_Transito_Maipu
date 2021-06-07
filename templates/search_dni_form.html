@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- <link rel="stylesheet" href="../static/styles/style.css"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar datos de vehículos</title>
+</head>
+<body>
+    
+    <!-- Mensaje flash-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for message in messages %}
+                <li style="color: red; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; ">{{ message }}</li>
+            {% endfor %}
+        {% endif %} 
+    {% endwith %}
+    
+    <header>
+        <div class="title">
+            <h1>Buscar por D.N.I.</h1>
+        </div>  
+    </header>
+    <form action="/search_dni/", method="post" class="form">
+        <input type="text" id="n_dni" name="n_dni" size="7"><br>
+        <input class="button_card" type="submit" value="Buscar">
+    </form>
+    <table style="text-align: center; font-family: Arial, Helvetica, sans-serif; color: black; background-color:azure;" border="1">
+        <thead>
+            <tr>
+                <th>D.N.I.</th>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Distrito</th>
+                <th>Departamento</th>
+                <th>Provincia</th>
+                <th>Sexo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ data.0 }}</td>
+                <td>{{ data.1 }}</td>
+                <td>{{ data.2 }}</td>
+                <td>{{ data.3 }}</td>
+                <td>{{ data.4 }}</td>
+                <td>{{ data.5 }}</td>
+                <td>{{ data.6 }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <h3>Historial</h3>
+    <div>
+        <table style="text-align: center; font-family: Arial, Helvetica, sans-serif; color: black; background-color:azure;" border="1">
+            <thead>
+                <tr>
+                    <th>Número de accidente</th>
+                    <th>Fecha</th>
+                    <th>Direccion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for datos_acc in datos_acc_list %}
+                <tr>
+                    <td>{{ datos_acc.0 }}</td>
+                    <td>{{ datos_acc.1 }}</td>
+                    <td>{{ datos_acc.2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<html>
+

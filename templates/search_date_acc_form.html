@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- <link rel="stylesheet" href="../static/styles/style.css"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accidentes Entre Fechas</title>
+</head>
+<body>
+    <header>
+        <div class="title">
+            <h1>Accidentes entre dos fechas</h1>
+        </div>  
+    </header>
+    <div>
+        <form class="form" action="/accidentologia/date_search/", method="post" style="text-align: center"; target="_blank">
+            <div>
+                <label for="fecha_inicio">Fecha inicial: </label>
+                <input type="date" name="fecha_inicio" id="fecha_inicio" size="7" required>
+            </div>
+            <div>
+                <label for="fecha_final">Fecha final: </label>
+                <input type="date" name="fecha_final" id="fecha_final" size="7" required>
+            </div>
+            <div>
+                <input class="button_card" type=submit value=Consultar>  
+            </div>
+        </form>
+    </div>
+    <table style="text-align: center; font-family: Arial, Helvetica, sans-serif; color: black; background-color:azure;" border="1">
+        <div>
+            <thead>
+                <tr>
+                    <td>Fecha</td>
+                    <td>Número acc</td>
+                    <td>Hora</td>
+                    <td>Direccion</td>
+                    <td>Distrito</td>
+                    <td>Perito</td>
+                    <td>Tomado en</td>
+                    <td>Tipo</td>
+                    <td>Lesiones</td>
+                </tr>
+            </thead>
+        </div>
+        <div>
+            <tbody>
+                {% for datos_acc in data %}
+                <tr>
+                    <td>{{ datos_acc.0 }}</td>
+                    <td>{{ datos_acc.1 }}</td>
+                    <td>{{ datos_acc.2 }}</td>
+                    <td>{{ datos_acc.3 }}</td>
+                    <td>{{ datos_acc.4 }}</td>
+                    <td>{{ datos_acc.5 }}</td>
+                    <td>{{ datos_acc.6 }}</td>
+                    <td>{{ datos_acc.7 }}</td>
+                    <td>{{ datos_acc.8 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </div>
+    </table>
+</body>
+</html>

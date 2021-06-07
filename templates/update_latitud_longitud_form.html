@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/signin.css') }}" type="text/css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update de georeferenciación</title>
+</head>
+<body>
+    <h1>Dirección de Tránsito y Prevención Ciudadana</h1>
+    <h2>Maipú Municipio</h2>
+    <h3>Cambiar coordenadas de latitud y longitud</h3>
+    <form action="/accidentologia/update_lat_lng/", method="post" target="framename">
+        <div>
+            <label for="n_acc" >Indique el número de accidente: </label>
+            <input type="text" id="n_acc" name="n_accidente" maxlength="7" minlength="7" size="7" placeholder="AA0NNNN" required><br>
+            <br>
+            <label for="latitud">Indique el valor de latitud: </label>
+            <input type="number" name='latitud' step="0.0001" min="-100" max="0" required><br>
+            <br>
+            <label for="longitud">Indique el valor de longitud: </label>
+            <input type="number" name='longitud' step="0.0001" min="-100" max="0" required>
+            <br>
+            <input type="submit" value="Update">
+        </div>
+    </form>
+    <br>
+    <iframe src="https://satellite-map.gosur.com/es/?gclid=CjwKCAjwxuuCBhATEiwAIIIz0dxsXYdYRWO-53QXXNbSCeyNJtJ-rCAbCS_XBerxD5X_H_ie-1JXNhoCzG0QAvD_BwE&ll=-32.97972483557224,-68.79640367096255&z=19.5&t=satellite" frameborder="2" width="50%" height="300"></iframe>
+    <br>
+</body>
+</html>

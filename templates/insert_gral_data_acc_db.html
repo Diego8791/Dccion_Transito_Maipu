@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- <link rel="stylesheet" href="../static/styles/style.css"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar datos de accidentes</title>
+</head>
+<body>
+
+    <!--Mensaje flash-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for message in messages %}
+                <li style="color: red; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; ">{{ message }}</li>
+            {% endfor %}
+        {% endif %} 
+    {% endwith %}
+    
+    <header>
+        <div class="title">
+            <h1>Registro de datos generales de accidentes</h1>
+        </div>  
+    </header>
+    <div class="container_form">
+        <div>
+            <form class="form" action="/accidentologia/insert_acc_gral_data/", method="post">
+                <div>
+                    <label for="n_acc">Ingrese numero de accidente:  </label><br>
+                    <input type="text" name="n_acc" id="n_acc" maxlength="7" minlength="7" size="7" placeholder="AA0NNNN" required>
+                </div>
+                <div>
+                    <label for="fecha">Seleccione la fecha del accidente: </label><br>
+                    <input type="date" name="fecha" id="fecha" size="7" required>
+                </div>
+                <div>
+                    <label for="hora">Indique hora de ocurrencia del siniestro:  </label><br>
+                    <input type="time" name= "hora" id="hora" required>
+                </div>
+                <div>
+                    <label for="direccion">Ingrese direccion del siniestro:  </label><br>
+                    <input type="text" name="direccion" id="direccion" size="30">
+                </div>
+                <div>
+                    <label for="fk_distrito_id">Seleccione el distrito: </label><br>
+                    <select id="distrito" name="distrito" size="1" required>
+                        <option value="Barrancas">Barrancas</option>
+                        <option value="Ciudad">Ciudad</option>
+                        <option value="Coquimbito">Coquimbito</option>
+                        <option value="Cruz de Piedra">Cruz De Piedra</option>
+                        <option value="Fray Luis Beltrán">Fray Luis Beltran</option>
+                        <option value="General Gutierrez">General Gutierrez</option>
+                        <option value="General Ortega">General Ortega</option>
+                        <option value="Lunlunta">Lunlunta</option>
+                        <option value="Luzuriaga">Luzuriaga</option>
+                        <option value="Rodeo Del Medio">Rodeo Del Medio</option>
+                        <option value="Russell">Russell</option>
+                        <option value="San Roque">San Roque</option>
+                        <option value="Microcentro">Microcentro</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="fk_perito_id">Seleccione el perito: </label><br>
+                    <select class="select_form" id="perito" name="perito" size="1" required>
+                        <option value="1">Arce Mauro</option>
+                        <option value="2">Cañas Dante</option>
+                        <option value="3">Decara Graciela</option>
+                        <option value="4">Farias Diego</option>
+                        <option value="5">Mattolini Martin</option>
+                        <option value="6">Montaña Yamila</option>
+                        <option value="7">Nodaro Daniel</option>
+                        <option value="8">Paredes Fabian</option>
+                        <option value="9">Puche Matias</option>
+                        <option value="10">Suarez Paola</option>
+                        <option value="11">Tolli Roxana</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="fk_tomado_en_id">El accidente fue tomado en:</label><br>
+                    <select class="select_form" id="fk_tomado_en_id" name="tomado_en" size="1" required>
+                        <option value="1">En lugar del hecho</option>
+                        <option value="2">En dependencia</option>
+                        <option value="3">No registrado</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="fk_tipo_id">Indique tipo de accidente: </label><br>
+                    <select id="fk_tipo_id" name="tipo" size="1" required>
+                        {% for tipo in tipo_acc %}
+                            <option value={{tipo.0}}>{{tipo.1}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="fk_lesiones_id">¿Hubo lesiones? </label><br>
+                    <select class="select_form" id="fk_lesiones_id" name="con_sin_les" size="1" required>
+                        <option value="1">Con lesiones</option>
+                        <option value="2">Sin lesiones</option>
+                        <option value="3">Lesiones leves</option>
+                        <option value="4">Lesiones graves</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="obs">Observaciones: </label><br>
+                    <input type="text" name="obs" id="obs" size="30">
+                </div>
+                <br>
+                <div>
+                    <button class="button_card" onclick="InsertParticipantAcc()">Participes</button>
+                    <script>
+                        function InsertParticipantAcc() {
+                            window.open("/accidentologia/insert_acc_gral_data/insert_participe/", "Ingresar Partícipe", "_blanck,width=400,height=500,left=100,top=200");
+                        }
+                    </script>
+                </div>
+                <div>
+                    <input class="button_form" type="submit" value="Registrar datos generales">   
+                </div>
+            </form>       
+        </div>
+        <div>
+            <iframe class="map_class" src="https://satellite-map.gosur.com/es/?gclid=CjwKCAjwxuuCBhATEiwAIIIz0dxsXYdYRWO-53QXXNbSCeyNJtJ-rCAbCS_XBerxD5X_H_ie-1JXNhoCzG0QAvD_BwE&ll=-32.972801,-68.811372&z=30.7&t=map"></iframe>
+        </div>
+    </div>
+</body>
+</html>

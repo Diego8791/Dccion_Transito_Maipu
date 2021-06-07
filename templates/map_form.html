@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Accidentologico</title>
+</head>
+<body>
+    <header>
+        <div class="title">
+            <h1>Mapa Accidentologico</h1>
+        </div>  
+    </header>
+    <div>
+        <form class="form" action="/accidentologia/mapa/", method="post" target="framename">
+            <div>
+                <div>
+                    <label for="n_inicial" >Indique el primer número a graficar: </label>
+                    <input type="text" id="n_inicial" name="n_inicial" maxlength="7" minlength="7" size="7" placeholder="AA0NNNN" required><br>
+                </div>
+                <br>
+                <div>
+                    <label for="n_inicial">Indique el último número a graficar: </label>
+                    <input type="text" id="n_final" name="n_final" maxlength="7" minlength="7" size="7" placeholder="AA0NNNN" required><br>
+                </div>
+                <br>
+                <div>
+                    <input class="button_card" type=submit value=Generar>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

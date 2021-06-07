@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- <link rel="stylesheet" href="../static/styles/style.css"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar padrón</title>
+</head>
+<body>
+    
+    <!--Mensaje Flash-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for message in messages %}
+                <li style="color: red; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; ">{{ message }}</li>
+            {% endfor %}
+        {% endif %} 
+    {% endwith %}
+    
+    <header>
+        <div class="title">
+            <h1>Registro de conductores</h1>
+        </div>  
+    </header>
+    <div>
+        <form class="form" action="/insert_persona/", method="post">
+            <div>
+                <label for="nombre">Nombre:  </label><br>
+                <input type="text" name="nombre" id="nombre" size="20" required>
+            </div>
+            <div>
+                <label for="tipo_dni">Tipo de documento: </label><br>
+                <select id="tipo_dni" name="tipo_dni" size="1">
+                    <option value="DNI">DNI</option>
+                    <option value="LE">LE</option>
+                </select>
+            </div>
+            <div>
+                <label for="n_doc">Numero de documento:  </label><br>
+                <input type="text" name= "n_doc" id="n_doc" size= '8' maxlength= '8' required>
+            </div>
+            <div>
+                <label for="sexo">Sexo:  </label><br>
+                <select id="sexo" name="sexo" size="1" required>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                </select>   
+            </div>
+            <div>
+                <label for="f_nacimiento">Ingrese fecha de nacimiento:  </label><br>
+                <input type="date" name="f_nacimiento" id="f_nacimiento" size="10" required>
+            </div>
+            <div>
+                <label for="e_civil">Estado Civil:  </label><br>
+                <select id="e_civil" name="e_civil" size="1">
+                    <option value="0">Casado</option>
+                    <option value="1">Soltero</option>
+                    <option value="2">Separado</option>
+                    <option value="3">Divorciado</option>
+                    <option value="4">Conviviente</option>
+                    <option value="4">No se determina</option>
+                </select><br>
+            </div>
+            <div>
+                <label for="cuil">Ingrese numero de cuil:  </label><br>
+                <input type="text" name="cuil" id="cuil" size="15">
+            </div>
+            <div>
+                <label for="domicilio">Ingrese domicilio:  </label><br>
+                <input type="text" name="domicilio" id="domicilio" size="40" required>
+            </div>
+            <div>
+                <label for="fk_distrito_id">Seleccione el distrito: </label> <br>
+                <select id="distrito" name="distrito" size="1" required>
+                    {% for distrito in distrit -%}
+                        <option value={{distrito.0}}>{{distrito.1}}</option>
+                    {% endfor -%}
+                </select>
+            </div>
+            <div>
+                <label for="fk_depto_id">Seleccione el departamento: </label><br>
+                <select id="dpto" name="depto" size="1" required>
+                    {% for departamento in dptos -%}
+                        <option value={{departamento.0}}>{{departamento.1}}</option>
+                    {% endfor -%}
+                </select>
+            </div>
+            <div>
+                <label for="fk_pcia_id">Provincia:</label><br>
+                <select id="pcias" name="provincias" size="1" required>
+                    {% for provincias in pcias -%}
+                        <option value={{provincias.0}}>{{provincias.1}}</option>
+                    {% endfor -%}
+                </select>
+            </div>
+            <div>
+                <label for="fk_nacion_id">Indique nacionalidad: </label><br>
+                <select id="nacion" name="nacionalidad" size="1" required>
+                    {% for nacionalidad in nacion -%}
+                        <option value={{nacionalidad.0}}>{{nacionalidad.1}}</option>
+                    {% endfor -%}
+                </select>
+            </div>
+            <div>
+                <label for="cod_postal">Código postal: </label><br>
+                <input type="text" name="c_postal" id="c_postal" size="10">
+            </div>
+            <div>
+                <input class="button_card" type="submit" value="Registrar">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

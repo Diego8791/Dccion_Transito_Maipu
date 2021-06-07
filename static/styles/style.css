@@ -1,0 +1,139 @@
+body {
+    color: cornsilk;
+    margin: 0px;
+}
+header {
+    background-color: rgb(1, 174, 243);
+}
+h1 {
+    color: white;
+    font-family: Helvetica, sans-serif;
+}
+h2, h3 {
+    color: black;
+    font-family: Helvetica, sans-serif;
+}
+li {
+    display: inline;
+    padding: 10px;
+}
+a {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: black;
+}
+.container{
+    display: flex;
+    justify-content: space-between;
+    margin: 0px;
+}
+.title {
+    background-color: rgb(1, 174, 243);
+    padding: 10px 10px 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+.title_img {
+    border-radius: 10%;  
+}
+.card {
+    background-color: burlywood;
+    width: 200px;
+    margin-top: 10px;
+    margin-left: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 5px rgb(36, 180, 199,0.3);
+}
+.space_img_card {
+    height: 180px;
+    margin: 0;
+}
+.img_card {
+    width: 200px;
+    border-radius: 10px 10px 0 0;
+    height: 180px;
+}
+
+.title_card {
+    color: black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    height: 50px;
+    margin: 0;
+    font-size:15px ;
+}
+.paragraph_card {
+    color: black;
+    font-size: small;
+    padding: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100px;
+}
+.button_card {
+    background-color:coral;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    border: none;
+    padding: 10px 30px 10px 30px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 25px crimson;
+    margin: 30px;
+}
+
+.footer {
+    background-color: rgb(1, 174, 243);
+    text-align: center;
+    margin-block-end: 0px;
+}
+.form {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: blue;
+    width: 400px;
+    padding: 15px;
+    background-color: burlywood;
+    border-radius: 10px;
+    margin: 30px;
+    box-shadow: 0 0 0 5px rgb(36, 180, 199,0.3);
+    padding: 5px;
+}
+.font_form {
+    color: black;
+    font-size: 15px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: italic;
+}
+.select_form {
+    color: black;
+    font-size: 15px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;   
+    border-radius: 5px;
+}
+.heigth_form {
+    height: 420px;
+}
+.container_form {
+    max-width: 1000px;
+    display: flex;
+    justify-content:space-around;
+}
+.button_form {
+    background-color:coral;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    border: none;
+    padding: 10px 30px 10px 30px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 25px crimson;
+    margin: 20px;
+}
+.map_class {
+    width: 400px;
+    height: 400px;
+    margin: 30px 0 0 0;
+}
+.li {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: brown;
+  }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="../static/styles/signin.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    
+    <!--Código para flash de mensaje de alerta por usuario incorrecto-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for message in messages %}
+                <li class="li">{{ message }}</li>
+            {% endfor %}
+        {% endif %} 
+    {% endwith %}
+
+    <header>
+        <img class="image" src="../static/logo_muni_maipu.jpg" alt="logo muni Maipú">
+        <h1>Dirección de Tránsito</h1>
+        <h2>¡Bienvenido!</h2>
+    </header>
+    <section>
+        <form method="post" style="text-align: center;">
+            <div class="user_form">
+                <label for="fname" >Usuario:</label><br>
+                <select id="user" name="username" size="1" required>
+                    <!--formar tabla dinámica con usuarios-->
+                    {% for name in username %}
+                        <option value={{name.0}}>{{name.0}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="user_form">
+                <label for="fname">e_mail:</label><br>
+                <input type="email" name="email" required>
+            </div>
+            <div class="user_form">
+                <label for="fname">Password:</label><br>
+                <input type="password" name="password" required>
+            <div>
+                <input class="button_card" type=submit value=Login>
+            </div>
+        </form>
+    </section>
+</body>
+</html>
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="../static/styles/style.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accidentologia Vial</title>
+</head>
+<body>
+    <header>
+        <div class="title">
+            <img class="title_img" src="../static/logo_muni_maipu.jpg" alt="Municipalidad de Maipú">
+            <h1>Accidentología Vial</h1>
+        </div>    
+        <nav>
+            <ul class="container">
+                <li><a href="/home/">Home</a></li>
+                <li><a href="https://maipu.gob.ar/">Maipu Municipio</a></li>
+                <li><a href="#">Links de Interes</a></li>
+                <li><a href="/accidentologia/update_lat_lng/">Update</a></li>
+                <li><a href="/logout/">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="container">
+        <div class="card">
+            <div class="space_img_card">
+                <img class="img_card" src="../static/carga_datos.jpg" alt="Carga de datos">
+            </div>
+            <div class="title_card">
+                <h2>Carga de datos</h2>
+            </div>
+            <div class="paragraph_card">
+                <p>Cargar datos de accidentes, generales y de partícipes.</p>
+            </div>
+            <div>
+                <button class="button_card" onclick="InsertDataAcc()">Ingresar</button>
+                <script>
+                    function InsertDataAcc() {
+                        window.open("/accidentologia/insert_acc_gral_data/", "_blanck", "width=800,height=600,left=100,top=200");
+                    }
+                </script>
+            </div>
+        </div>
+        <div class="card">
+            <div class="space_img_card">
+                <img class="img_card" src="../static/buscar_datos.jpg" alt="Buscar datos">
+            </div>
+            <div class="title_card">
+                <h2>Consulta de datos</h2>
+            </div>
+            <div class="paragraph_card">
+                <p>Buscar datos de accidentes por diferentes criterios de búsqueda</p>
+            </div>
+            <div>
+                <button class="button_card" onclick="SerchDataAcc()">Ingresar</button>
+                <script>
+                    function SerchDataAcc() {
+                        window.open("/accidentologia/search_menu/", "_blanck", "width=400,height=400,left=100,top=200");
+                    }
+                </script>
+            </div>    
+        </div>
+        <div class="card">
+            <div class="space_img_card">
+                <img class="img_card" src="../static/estadisticas.jpg" alt="Estadísticas">
+            </div>
+            <div class="title_card">
+                <h2>Estadísticas</h2>
+            </div>
+            <div class="paragraph_card">
+                <p>Generar estadísticas de accidentes, alcoholemia, conductores, etc.</p>
+            </div>
+            <div>
+                <button class="button_card" onclick="StatisticsAcc()">Ingresar</button>
+                <script>
+                    function StatisticsAcc() {
+                        window.open("/accidentologia/estadisticas/", "_blanck", "width=600,height=600,left=100,top=200");
+                    }
+                </script>
+            </div>   
+        </div>
+        <div class="card">
+            <div class="space_img_card">
+                <img class="img_card" src="../static/geolocalización.jpg" alt="Geolocalización">
+            </div>
+            <div class="title_card">
+                <h2>Mapa Accidentológico</h2>
+            </div>
+            <div class="paragraph_card">
+                <p>Generar mapa con geolocalización de accidentes, visualizando puntos críticos.</p>
+            </div>
+            <div>
+                <button class="button_card" onclick="GeoMap()">Ingresar</button>
+                <script>
+                    function GeoMap() {
+                        window.open("/accidentologia/mapa/", "_blanck", "width=600,height=600,left=100,top=200");
+                    }
+                </script>
+            </div>   
+        </div>
+    </section>
+    <footer>
+        <div class='footer'>
+        <h3>Dirección de Tránsito - Maipú - Mendoza - 2.021</h3>
+        </div>
+    </footer>
+</body>
+</html>

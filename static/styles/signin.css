@@ -1,0 +1,50 @@
+body {
+  background-color: cornsilk;
+  align-items: center;
+}
+h1 {
+  color: rgb(1, 174, 243);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: center;
+}
+h2 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: center;
+  color: rgb(1, 174, 243);
+}
+.li {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: brown;
+}
+.image {
+  display: block;
+  margin: auto;
+  width: 15%;
+  border-radius: 10px;
+}
+.user_form {
+  text-align: center;
+  font-size: medium;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin: 10px;
+}
+iframe {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: 40%;
+}
+.container {
+  margin: 10px
+}
+.button_card {
+  background-color:coral;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  border: none;
+  padding: 10px 30px 10px 30px;
+  border-radius: 20px;
+  box-shadow: 2px 2px 25px crimson;
+  margin: 30px;
+}

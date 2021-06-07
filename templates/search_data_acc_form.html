@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- <link rel="stylesheet" href="../static/styles/style.css" type="text/css"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Accidentes</title>
+</head>
+<body>
+    
+    <!-- Código para flash de mensaje de alerta por patente no encontrada-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for message in messages %}
+            <li style="color: red; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; ">{{ message }}</li>
+        {% endfor %}
+    {% endif %} 
+    {% endwith %}
+    
+    <header>
+        <div class="title">
+            <h1>Buscar por número de accidente</h1>
+        </div>  
+    </header>
+    <form class="form" action="/accidentologia/data_acc_search/", method="post">
+        <div>
+            <label for="n_acc" >Indique el número de accidente: </label>
+            <input type="text" id="n_acc" name="n_acc" maxlength="7" minlength="7" size="7" placeholder="AA0NNNN" required><br>
+        </div>
+        <div>
+            <input class="button_form" type="submit" value="Consultar">
+        </div>
+    </form>
+    <div>
+        <h3>Datos Generales</h3>
+        <table style="text-align: center; font-family: Arial, Helvetica, sans-serif; color: black; background-color:azure;" border="1">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Número acc</th>
+                    <th>Hora</th>
+                    <th>Direccion</th>
+                    <th>Distrito</th>
+                    <th>Perito</th>
+                    <th>Tomado en</th>
+                    <th>Tipo</th>
+                    <th>Lesiones</th>
+                    <th>Observaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ datos_acc.0 }}</td>
+                    <td>{{ datos_acc.1 }}</td>
+                    <td>{{ datos_acc.2 }}</td>
+                    <td>{{ datos_acc.3 }}</td>
+                    <td>{{ datos_acc.4 }}</td>
+                    <td>{{ datos_acc.5 }}</td>
+                    <td>{{ datos_acc.6 }}</td>
+                    <td>{{ datos_acc.7 }}</td>
+                    <td>{{ datos_acc.8 }}</td>
+                    <td>{{ datos_acc.9 }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <h3>Participes</h3>
+            <table style="text-align: center; font-family: Arial, Helvetica, sans-serif; color: black; background-color:azure;" border="1">
+                <thead>
+                    <tr>
+                        <th>D.N.I.</th>
+                        <th>Nombre</th>
+                        <th>Alcoholemia</th>
+                        <th>Patente</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                    </tr>
+                 </thead>
+                <tbody>
+                    {% for participe in participes %}
+                     <tr>
+                        <td>{{ participe.0 }}</td>
+                        <td>{{ participe.1 }}</td>
+                        <td>{{ participe.2 }}</td>
+                        <td>{{ participe.3 }}</td>
+                        <td>{{ participe.4 }}</td>
+                        <td>{{ participe.5 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>      
+        </div>
+        <div>
+            <iframe class="map_class" src="https://satellite-map.gosur.com/es/?gclid=CjwKCAjwxuuCBhATEiwAIIIz0dxsXYdYRWO-53QXXNbSCeyNJtJ-rCAbCS_XBerxD5X_H_ie-1JXNhoCzG0QAvD_BwE&ll={{ lat_long.0 }},{{ lat_long.1 }}&z=19.5&t=map"></iframe>     
+        </div>     
+    </div> 
+</body>
+</html>

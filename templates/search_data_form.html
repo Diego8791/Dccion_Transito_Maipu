@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- <link rel="stylesheet" href="../static/styles/style.css"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas</title>
+</head>
+<body>
+    <header>
+        <div class="title">
+            <h1>Consultas</h1>
+        </div>  
+    </header>
+    <div>
+        <form class="form" action="/accidentologia/search_menu/", method="post" target="framename">
+            <div>
+                <div>
+                    <label for="por_DNI">Por D.N.I.</label>
+                    <input type="radio" id="por_DNI" name="consulta" value='1'>
+                </div>
+                <div>
+                    <label for="por_dominio">Por Dominio</label> 
+                    <input type="radio" id="por_dominio" name="consulta" value='2'>
+                </div>
+                <div>
+                    <label for="por_numero_acc">Por número de accidente</label>
+                    <input type="radio" id="por_numero_acc" name="consulta" value='3'>
+                </div>
+                <div>
+                    <label for="por_fecha">Por fecha</label>
+                    <input type="radio" id="por_fecha" name="consulta" value='4'>
+                </div>
+                <!-- <script>
+                    function Insert_Dominio() {
+                        window.open("/insert_vehiculo/", "Alta de vehículo", "_blanck,width=400,height=300,left=100,top=200");
+                    }
+                </script> --> 
+                <div>
+                    <input class="button_card" type=submit value=Consultar>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
