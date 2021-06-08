@@ -106,19 +106,18 @@
                     <label for="obs">Observaciones: </label><br>
                     <input type="text" name="obs" id="obs" size="30">
                 </div>
-                <br>
-                <div>
-                    <button class="button_card" onclick="InsertParticipantAcc()">Participes</button>
-                    <script>
-                        function InsertParticipantAcc() {
-                            window.open("/accidentologia/insert_acc_gral_data/insert_participe/", "Ingresar Partícipe", "_blanck,width=400,height=500,left=100,top=200");
-                        }
-                    </script>
-                </div>
                 <div>
                     <input class="button_form" type="submit" value="Registrar datos generales">   
                 </div>
             </form>       
+            <div>
+                <button class="button_card" onclick="InsertParticipantAcc()">Participes</button>
+                <script>
+                    function InsertParticipantAcc() {
+                        window.open("/accidentologia/insert_participe/", "Ingresar Partícipe", "_blanck,width=400,height=500,left=100,top=200");
+                    }
+                </script>
+            </div>
         </div>
         <div>
             <iframe class="map_class" src="https://satellite-map.gosur.com/es/?gclid=CjwKCAjwxuuCBhATEiwAIIIz0dxsXYdYRWO-53QXXNbSCeyNJtJ-rCAbCS_XBerxD5X_H_ie-1JXNhoCzG0QAvD_BwE&ll=-32.972801,-68.811372&z=30.7&t=map"></iframe>

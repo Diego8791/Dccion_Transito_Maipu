@@ -1,22 +1,21 @@
 #!/usr/bin/env python
 '''
-API Personas
+API Gestión
 ---------------------------
-Autor: .......
+Autor: Diego Farias
 Version: 1.0
 
 Descripcion:
-Se utiliza .......
+Se utiliza en Direción de Tránsito de Maipú
 
-Ejecución: Lanzar el ..........
+Ejecución: Lanzar el .........
 
 
 '''
 
-__author__ = "Inove Coding School"
-__email__ = "INFO@INOVE.COM.AR"
+__author__ = "Diego Farias"
+__email__ = "dfarias8791@gmail.com"
 __version__ = "1.0"
-
 
 
 from flask import Flask, request, jsonify, render_template, Response, redirect, url_for, session, flash
@@ -125,7 +124,7 @@ def logout():
 @app.route("/home/")
 def home():
     '''
-    Ingresar a home principal
+    Ingresar a página principal
     '''
     try:
         if 'user' in session:
@@ -134,7 +133,7 @@ def home():
         return jsonify({'trace': traceback.format_exc()})
 
 
-# -----------------------  ACCIDENTOLOGIA --------------------------------------------------
+# -----------------------------------  ACCIDENTOLOGIA -----------------------------------------------
 
 @app.route("/accidentologia/")
 def accidentologia():
@@ -156,6 +155,7 @@ def insert_data():
     try:
         if 'user' in session:
             if request.method == 'GET':
+                
                 # Abrir base de datos
                 conn = mysql.connector.connect(user='username', password='password', host='localhost', database='dccion_transito_db')
                 cursor = conn.cursor()                                                                                                 # crear objeto cursor usando el método cursor()
@@ -181,38 +181,37 @@ def insert_data():
                 tipo = int(request.form['tipo'])
                 con_sin_les = int(request.form['con_sin_les'])
                 obs = request.form['obs']
-
+				# enviar datos para geolocalización
                 adress = direccion + ', ' + distrito + ', Maipú, Mendoza, Argentina'                                                       # crear string para georeferenciación
                 lat, lng = my_geo.adress_locations(adress)                                                                                 # obterner latitud y longitud
-
                 # Abrir base de datos users_db
                 conn = mysql.connector.connect(user='username', password='password', host='localhost', database='dccion_transito_db')
                 cursor = conn.cursor()
-
+				# cambiar nombre de distrito por id de distrito
                 sql = 'SELECT id FROM distritos_maipu WHERE n_distritos_maipu = (%s)'                                                       # obtener id de distrito
                 cursor.execute(sql, [distrito])
                 distrito = cursor.fetchone()[0]
-
+				# formar lista de registro de datos generales
                 data = [n_acc, fecha, hora, direccion, distrito, perito, tomado_en, tipo, con_sin_les, obs, lat, lng]                        # registrar registro en base de datos accidentologia_db
-                
+                # registrar lista en base de datos
                 sql = '''INSERT INTO datos_grales_acc
                             (n_acc, fecha, hora, direccion, fk_distrito_maipu_id, fk_perito_id,
                             fk_tomado_en_id, fk_tipo_id, fk_lesiones_id, obs, latitud, longitud)
                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
                 cursor.execute(sql, data)
-                conn.commit()           
-
+                conn.commit()
                 # cerrar conexion
                 conn.close()
-                
+                # mensaje confirmación de registro válido
                 flash('¡BUEN TRABAJO!... se han cargado los datos generales!')                                                                                       # Mensaje de sesión cerrada
                 return redirect(url_for('insert_data'))
     except:
+        # mensaje de error al registrar en base de datos
         flash('¡ATENCIÓN!... Se ha producido un error al registrar los datos generales') 
         return redirect(url_for('insert_data'))    
 
 
-@app.route("/accidentologia/insert_acc_gral_data/insert_participe/", methods=['GET', 'POST'])
+@app.route("/accidentologia/insert_participe/", methods=['GET', 'POST'])
 def insert_participe_accidentologia():
     '''
     Ingresar partícipes de accidentes
@@ -228,7 +227,7 @@ def insert_participe_accidentologia():
             categorias = request.form.getlist('categorias')
             categorias = "".join(categorias)                            #transformar la lista en string
             test_alcoholemia = request.form['test_alcoholemia']
-            if test_alcoholemia == '':                                  #salvar cuando no se hace
+            if test_alcoholemia == '':                                  #salvar cuando no se ha tomado alcoholemia
                 test_alcoholemia = 'no se realizó'
             f_etaria = int(request.form['f_etaria'])
             dominio = request.form['dominio']
@@ -237,20 +236,19 @@ def insert_participe_accidentologia():
                 # Abrir base de datos dccion_transito_db
                 conn = mysql.connector.connect(user='username', password='password', host='localhost', database='dccion_transito_db')
                 cursor = conn.cursor()
-          
+				# consultar id de patente
                 sql = 'SELECT id FROM rodado WHERE patente = (%s)'                                                                    # Obtener id de dominio de vehículo
                 cursor.execute(sql,[dominio])
                 id_patente = cursor.fetchone()[0]
-
+				# consultar id de numero de documento
                 sql = 'SELECT id FROM padron WHERE n_doc = (%s)'                                                                       # obtener id de dni
                 cursor.execute(sql,[n_doc])
                 id_n_doc = cursor.fetchone()[0]
-
-                # Verificar que en n_doc no esté ya cargado en el numero de accidente
+                # Verificar que el numero de documento no esté ya cargado en el numero de accidente
                 sql = 'SELECT fk_n_doc_id FROM participe WHERE n_acc = (%s)'
                 cursor.execute(sql,[n_acc])
                 resultado = cursor.fetchall()
-                # validación de d.n.i. para el número de accidente
+                # validación de numero de documento para el número de accidente
                 clave = False
                 for fk_n_doc_id in resultado:
                     if id_n_doc == fk_n_doc_id[0]:
@@ -265,51 +263,52 @@ def insert_participe_accidentologia():
                     cursor.execute(sql, data)
                     conn.commit()
                     conn.close()
+                    # mensaje de validación satisfactoria
                     flash('¡BUEN TRABAJO!... Partícipe registrado con éxito')                                                                                # mensaje de error
                     return redirect(url_for('insert_participe_accidentologia'))  
                 else:
+					# mensaje de que el numero de documento ya se encuentra registrado en el accidente
                     flash('¡ATENCIÓN!...El partícipe ya se encuentra registrado en ese accidente')                                                                                # mensaje de error
                     return redirect(url_for('insert_participe_accidentologia'))
             except:
+                # mensaje de error al registrar partícipe
                 flash('¡ERROR AL REGISTRAR!... no se ha podido ingresar el partícipe')                                                                                # mensaje de error
                 return redirect(url_for('insert_participe_accidentologia'))
 
 
-# ------------------------------ CONSULTAS ----------------------------------------------------
+# --------------------------------------- CONSULTAS ----------------------------------------------------
+
 
 @app.route("/accidentologia/search_menu/", methods=['GET', 'POST'])
-# @login_required
 def search_menu():
     '''
     Menu de consultas
-        - Buscar por D.N.I.
-        - Buscar por dominio
-        - Buscar por accidente
-        - Buscar por fecha de ocurrencia
+    - Buscar por D.N.I.
+    - Buscar por dominio
+    - Buscar por accidente
+    - Buscar por fecha de ocurrencia
     '''
-    try:
-        if 'user' in session:
+    if 'user' in session:
+        try:
             if request.method == "GET":
+                # llamar a formulario
                 return render_template('search_data_form.html')                                                             # llamar a formulario principal de consultas
 
             if request.method == "POST":
+                # recibir opción desde formulario
                 opcion = int(request.form['consulta'])
                 if opcion == 1:
-                    data=[]
-                    return render_template('search_dni_form.html', data=data)
+                    return redirect(url_for('search_dni'))
                 elif opcion == 2:
-                    data = []
-                    return render_template('search_dominio_form.html', data=data)
+                    return redirect(url_for('select_dominio'))
                 elif opcion == 3:
-                    datos_acc = []
-                    participe = []
-                    lat_long = [-32.9727, -68.8119]
-                    return render_template('search_data_acc_form.html', datos_acc=datos_acc, participe=participe, lat_long=lat_long)
+                    return redirect(url_for('data_acc_search'))
                 else:
-                    datos_acc = []
-                    return render_template('search_date_acc_form.html', datos_acc=datos_acc)
-    except:
-        return jsonify({'trace': traceback.format_exc()})
+                    return redirect(url_for('date_search_acc'))
+        except:
+			# mensaje flash
+            flash('¡ATENCION!... se ha producido un error en su seleccion')                                                                                
+            return redirect(url_for('search_menu'))
 
 
 @app.route("/search_dni/", methods=['GET', 'POST'])
@@ -317,8 +316,8 @@ def search_dni():
     '''
     Consultar datos por D.N.I.
     '''
-    try:
-        if 'user' in session:
+    if 'user' in session:
+        try:
             if request.method == "GET":
                 datos_padron = ()
                 datos_acc_list = ()
@@ -327,10 +326,11 @@ def search_dni():
             if request.method == "POST":
                 n_dni = request.form['n_dni']
                 datos_padron, datos_acc_list = query_acc_db.padron_dni(n_dni)
-                return render_template('search_dni_form.html', data=datos_padron, datos_acc_list=datos_acc_list)        
-    except:    
-        flash('D.N.I. no registrado')                                                                                # mensaje de que no está registrado el D.N.I.
-        return redirect(url_for('search_dni'))                                                                     # validación icorrecta
+                return render_template('search_dni_form.html', data=datos_padron, datos_acc_list=datos_acc_list)
+        except:    
+			# mensaje de que no está registrado el D.N.I.
+            flash('D.N.I. no registrado')
+            return redirect(url_for('search_dni'))                                                                
         
 
 @app.route("/select_dominio/", methods=['GET', 'POST'])
@@ -346,33 +346,43 @@ def select_dominio():
         if request.method == "POST":
             dominio = request.form['dominio']
             datos_dominio, datos_acc_list = query_acc_db.search_dominio(dominio)
-
+			# Evaluar el resultado de la busqueda
             if datos_dominio is not None:
                 return render_template('search_dominio_form.html', data=datos_dominio, datos_acc=datos_acc_list)
             else:          
-                flash('Dominio no registrado')                                                                                # mensaje de que no está registrado el D.N.I.
-                return redirect(url_for('select_dominio'))                                                                       # validación icorrecta         
+                # mensaje flash
+                flash('Dominio no registrado')                                                                               
+                return redirect(url_for('select_dominio'))                                        
 
 
 @app.route("/accidentologia/data_acc_search/", methods=['GET', 'POST'])
 def data_acc_search():
     '''
-    Consultar datos generales de accidentes por fecha
+    Consultar datos por numero de accidente
     '''
-    datos_acc = []
-    participes = []
-    lat_long = []
-    try:
-        if 'user' in session:
-           
-            if request.method == 'POST':
+    if 'user' in session:
+        if request.method == 'GET':				
+			# inicia listas necesarias
+            datos_acc = []
+            participe = []
+			# latitud y longitud de inicio
+            lat_long = [-32.9727, -68.8119]
+            return render_template('search_data_acc_form.html', datos_acc=datos_acc, participe=participe, lat_long=lat_long)
+    
+        if request.method == 'POST':
+            # inicio de listas necesarias
+            datos_acc = []
+            participes = []
+            lat_long = []
+            try:
                 n_acc = int(request.form['n_acc'])
+                # consulta de datos de accidente 
                 datos_acc, participes, lat_long = query_acc_db.data_search_acc(n_acc)
-                print(lat_long)
-            return render_template('search_data_acc_form.html', datos_acc=datos_acc, participes=participes, lat_long=lat_long)             
-    except:
-        flash('¡ATENCION!... Accidente no encontrado')                                                                   # mensaje de que no está registrado el D.N.I.
-        return redirect(url_for('/accidentologia/data_acc_search/'))                                                                       # validación icorrecta 
+                return render_template('search_data_acc_form.html', datos_acc=datos_acc, participes=participes, lat_long=lat_long)
+            except:
+				# mensaje flash
+                flash('¡ATENCION!... Accidente no encontrado')
+                return redirect(url_for('data_acc_search'))                                                                
 
 
 @app.route("/accidentologia/date_search/", methods=['GET', 'POST'])
@@ -380,77 +390,82 @@ def date_search_acc():
     '''
     Consultar datos generales de accidentes por fecha
     '''
-    # try:
     if 'user' in session:
         if request.method == "GET":
-
-            return render_template('search_date_acc_form.html')
-
-        if request.method == 'POST':
-
-            fecha_inicio = request.form['fecha_inicio']
-            fecha_final = request.form['fecha_final']
-
-            data = query_acc_db.date_search_acc(fecha_inicio, fecha_final)
-
+            # iniciar lista necesaria
+            data = []
+            # llamar a formulario
             return render_template('search_date_acc_form.html', data=data)
 
+        if request.method == 'POST':
+            try:
+				# recibe fecha de inicio y fin del intervalo
+                fecha_inicio = request.form['fecha_inicio']
+                fecha_final = request.form['fecha_final']
+				# consulta de accidentes entre ambas fechas
+                data = query_acc_db.date_search_acc(fecha_inicio, fecha_final)
+				# llamar a formulario y pasar lista data
+                return render_template('search_date_acc_form.html', data=data)
+            except:
+				# mensaje flash
+                flash('¡ATENCION!... Entre las fechas solicitadas no se encontraron accidentes')
+                return redirect(url_for('date_search_acc'))
+				
 
 # ----------------------REGISTRAR PERSONAS EN PADRON -----------------------------------
+
 
 @app.route("/insert_persona/", methods=['GET', 'POST'])
 def insert_persona():
     '''
     Ingresar datos de una persona que no se encuentra en base de datos padron_db
     '''
-    try:
-        if 'user' in session:
+    if 'user' in session:
+        try:
             if request.method == "GET":
-
-                # Abrir base de datos users_db
+                # Abrir base de datos
                 conn = mysql.connector.connect(user='username', password='password', host='localhost', database='dccion_transito_db')
-                # crear objeto cursor usando el método cursor()
                 cursor = conn.cursor()
-
-                # seleción dinámica de distritos de todo el país para ingresar ciudadano a padron
+                # seleción datos dinámicos de distritos de todo el país
+                # crea lista distritos
                 sql = "SELECT id, n_distrito FROM distritos"
                 cursor.execute(sql)
-                # bucle que lee los distritos disponibles
                 distritos = []
                 for distrito in cursor:
                     distritos.append(distrito)
-
-                # seleción dinámica de departamentos para ingresar ciudadano a padron
+                # seleción dinámica de departamentos de Mendoza
+                # crea lista departamentos
                 sql = "SELECT id, n_departamento FROM departamentos"
                 cursor.execute(sql)
-                # bucle que lee los departamentos
                 departamentos = []
                 for departamento in cursor:
                     departamentos.append(departamento)
-
-                # seleción dinámica de provincias de todo el país para ingresar ciudadano a padron
+                # seleción dinámica de provincias del país
+                # crea lista provincias
                 provincias = []
                 sql = "SELECT id, provincia FROM provincias"
                 cursor.execute(sql)
-                # bucle que lee las provincias
                 for provincia in cursor:
                     provincias.append(provincia)
-
-                # seleción dinámica de nacionalidades de todo el país para ingresar ciudadano a padron
+                # seleción dinámica de nacionalidades
+                # forma lista nacionalidades
                 nacionalidades = []
                 sql = "SELECT id, nacionalidad FROM nacionalidades"
                 cursor.execute(sql)
-                # bucle que lee las provincias
                 for nacionalidad in cursor:
                     nacionalidades.append(nacionalidad)
-
                 # cerrar conexion
                 conn.close()
-
+				# llamar a formulario y pasar listas
                 return render_template('insert_persona_form.html', distrit=distritos, dptos=departamentos, nacion=nacionalidades, pcias=provincias)
-
+        except:
+			# mensaje flash
+            flash('¡ATENCION!... Ha habido un problema al ingresar al formulario')
+            return redirect(url_for('insert_persona'))
+        
+        try:
             if request.method == 'POST':
-
+				# recibir datos de formulario
                 nombre = request.form['nombre']
                 tipo_dni = request.form['tipo_dni']
                 n_doc = int(request.form['n_doc'])
@@ -464,16 +479,16 @@ def insert_persona():
                 pcias = int(request.form['provincias'])
                 nacionalidad = int(request.form['nacionalidad'])
                 c_postal = request.form['c_postal']
-
+				# formar lista con datos recibidos
                 data = [nombre, tipo_dni, n_doc, sexo, f_nacimiento, e_civil, cuil, domicilio, distrito, dpto, pcias, nacionalidad, c_postal]
-
-                # establecer la conección
+                # establecer la conección con base de datos
                 conn = mysql.connector.connect(user='username', password='password', host='localhost', database='dccion_transito_db')
-                # crear objeto cursor usando el método cursor()
                 cursor = conn.cursor()
+                # consulta
                 sql = 'SELECT * FROM padron WHERE n_doc = (%s)'
                 cursor.execute(sql, [n_doc])
                 result = cursor.fetchone()
+                # evaluar si el numero de documento ya se encuentra registrado en padron
                 if result != None:            
                     flash('¡ATENCIÓN!... Éste D.N.I. ya se encuentra registrado') 
                     return redirect(url_for('insert_persona'))
@@ -486,122 +501,117 @@ def insert_persona():
                     conn.close()
                     flash('¡BUEN TRABAJO!... Datos de persona ingresado con éxito') 
                     return redirect(url_for('insert_persona'))
-    except:
-        flash('¡ATENCIÓN!... Se produjo un error al registrar') 
-        return redirect(url_for('insert_persona'))
+        except:
+			# mensaje flash
+            flash('¡ATENCIÓN!... Se produjo un error al registrar')
+            return redirect(url_for('insert_persona'))
 
 
 # ------------------------INGRESAR DE VEHICULOS POR DOMINIO. -----------------------------------------
+
 
 @app.route("/insert_vehiculo/", methods=['GET', 'POST'])
 def insert_vehiculo():
     '''
     Insertar datos de una persona que no se encuentra en base de datos padron_db
     '''
-    try:
-        if 'user' in session:
+    if 'user' in session:
+        try:
             if request.method == "GET":
-
                 # Abrir conexion
                 conn = mysql.connector.connect(user='username', password='password', host='localhost', database='dccion_transito_db')
-                # crear objeto cursor usando el método cursor()
                 cursor = conn.cursor()
-
                 # Busqueda dinámica para formulario
+				# crear lista marcas
                 marcas = []
                 cursor.execute("SELECT id, marca FROM marca_rodado")
                 for marca in cursor:
                     marcas.append(marca)
-
+				# crear lista modelos
                 modelos = []
                 cursor.execute("SELECT id, modelo FROM modelo_rodado")
                 for modelo in cursor:
                     modelos.append(modelo)
-
                 # cerrar la conexion
                 conn.close()
-
                 # llamar a formulario pasando lista para seleccion dinamica
                 return render_template('insert_vehiculos_form.html', marcas=marcas, modelos=modelos)
-
+        except:
+			# mensaje flash
+            flash('¡ATENCION!... Ha habido un problema al ingresar al formulario')
+            return redirect(url_for('insert_persona'))
+            
+        try:
             if request.method == 'POST':
-
+				# recibir datos de formulario
                 dominio = request.form['dominio']
                 marca = request.form['marca']
                 modelo = request.form['modelo']
-
+				# formar lista
                 rodado = [dominio, marca, modelo]
                 # Abrir conexion
                 conn = mysql.connector.connect(user='username', password='password', host='localhost', database='dccion_transito_db')
-                # crear objeto cursor usando el método cursor()
                 cursor = conn.cursor()
-
-                # query
+                # consulta
                 sql = '''
                         INSERT INTO rodado (patente, fk_marca_id, fk_modelo_id)
                         VALUES (%s,%s,%s)
                         '''
                 # ejecutar la query
                 cursor.execute(sql, rodado)
-
                 conn.commit()
                 # cerrar conexion
                 conn.close()
                 flash('¡BUEN TRABAJO!... Datos de vehículo ingresado con éxito') 
                 return redirect(url_for('insert_vehiculo'))
-    except:
-        flash('¡ATENCIÓN!... Se ha producido un error al registrar el vehículo') 
-        return redirect(url_for('insert_vehiculo'))
+        except:
+            flash('¡ATENCIÓN!... Se ha producido un error al registrar el vehículo')
+            return redirect(url_for('insert_vehiculo'))
 
 
 # ------------------------MAPA ACCIDENTOLOGICO -----------------------------------------
 
+
 @app.route("/accidentologia/mapa/", methods=['GET', 'POST'])
 def map():
     '''
-    Se selecciona el intérvalo de accidentes para producir mapa accidentológico.
-    n_inicial es el número de accidente inicial y n_final es el último número de accidente a considerar.
-    Ej: n_inicial: 200127; n_final: 200137, se seleccionarán los números 127, 128, 129, 130, 131, 132,
-    133, 134, 135, 136 y 137 del año 2020.
-    Para formar la lista de accidentes se utilizará el módulo mapa_accidentologico del archivo query_acc_db
+    Módulo para formar mapa accidentológico entre dos numeros de accidentes dados.
     '''
-
-    try:
-        if 'user' in session:
+    if 'user' in session:
+        try:       
             if request.method == 'GET':
-
+				# llamar a formulario 
                 return render_template('map_form.html')
 
             if request.method == 'POST':
-
+				# recibir datos de formulario
                 n_inicial = request.form['n_inicial']
                 n_final = request.form['n_final']
-
+				# formar lista con numeros de accidentes
                 lista_geo = query_acc_db.mapa_accidentologico(int(n_inicial), int(n_final))
-    
-        # Extraer cuantos accidentes hay por cada localización
-        lista_geo = collections.Counter(lista_geo)
-            
-        # extraer el valor mas alto de cantidad de accidentes
-        v_max = max([v for k, v in lista_geo.items()])
-        
-        some_map = folium.Map(location=[-32.9853509, -68.7877007], zoom_start=15, titles='localización de puntos de accidentes')
-        
-        for k, v in lista_geo.items():
-            # Distribución de accidentes
-            if v < (v_max * 0.3333334) :
-                folium.Circle(k, popop='<i>The Waterfront</i>', radius=30, fill=True, color='green',  tooltip=v).add_to(some_map)
-            elif v >= (v_max * 0.3333334) and v < (v_max * 0.6666667):
-                folium.CircleMarker(k, popop='<i>The Waterfront</i>', radius=30, fill=True, color='orange',  tooltip=v).add_to(some_map)
-            else:
-                folium.CircleMarker(k, popop='<i>The Waterfront</i>', radius=30, fill=True, color='red',  tooltip=v).add_to(some_map)
-            
-        return some_map._repr_html_()
-    except:
-        return "<h1>No hay accidentes a mostrar<h1>"
+				# FORMAR MAPA CON GEOLOCALIZACION DE ACCIDENTES
+				# Extraer cuantos accidentes hay por cada localización
+                lista_geo = collections.Counter(lista_geo)   
+				# extraer el valor mas alto de cantidad de accidentes
+                v_max = max([v for k, v in lista_geo.items()])
+                some_map = folium.Map(location=[-32.9853509, -68.7877007], zoom_start=15, titles='localización de puntos de accidentes')
+				# ubicar accidentes
+                for k, v in lista_geo.items():
+					# Distribución de accidentes
+                    if v < (v_max * 0.3333334) :
+                        folium.Circle(k, popop='<i>The Waterfront</i>', radius=30, fill=True, color='green',  tooltip=v).add_to(some_map)
+                    elif v >= (v_max * 0.3333334) and v < (v_max * 0.6666667):
+                        folium.CircleMarker(k, popop='<i>The Waterfront</i>', radius=30, fill=True, color='orange',  tooltip=v).add_to(some_map)
+                    else:
+                        folium.CircleMarker(k, popop='<i>The Waterfront</i>', radius=30, fill=True, color='red',  tooltip=v).add_to(some_map)
+				# imprimir mapa en pantalla	
+                return some_map._repr_html_()
+        except:
+            flash('¡ATENCIÓN!... Se ha producido un error al imprimir mapa, verifique los numeros de accidentes solicitados')
+            return redirect(url_for('map'))
+			
 
-
-# -----------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------ESTADÍSITICAS-------------------------------------------------------
 
 
 @app.route("/accidentologia/estadisticas/", methods=['GET', 'POST'])
@@ -672,7 +682,7 @@ def consultas_criterios():
                 elif id_consulta == 5:
                     interval_q = estadisticas.por_horario(n_inicial, n_final)
                     # gráfico de accidentes por horarios
-                    interval = ('00:00-02:00', '02:01-04:00', '04:01-06:00', '06:01-08:00', '08:01-10:00', '10:01-12:00', '12:01-14:00', '14:01-16:00', '16:01-18:00', '18:01-20:00', '20:01-22:00', '22:01-23:59')
+                    interval = ('00:00-02:01', '02:01-04:01', '04:01-06:01', '06:01-08:01', '08:01-10:01', '10:01-12:01', '12:01-14:01', '14:01-16:01', '16:01-18:01', '18:01-20:01', '20:01-22:01', '22:01-00:00')
                     interval_q = np.array(interval_q)
                     title = 'Distribución de accidentes por hora'
                     # graficar

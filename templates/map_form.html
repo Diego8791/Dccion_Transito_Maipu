@@ -8,6 +8,16 @@
     <title>Mapa Accidentologico</title>
 </head>
 <body>
+    
+    <!-- Mensaje flash-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for message in messages %}
+                <li style="color: red; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; ">{{ message }}</li>
+            {% endfor %}
+        {% endif %} 
+    {% endwith %}
+    
     <header>
         <div class="title">
             <h1>Mapa Accidentologico</h1>
